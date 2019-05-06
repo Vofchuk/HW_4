@@ -46,12 +46,21 @@ int& Vector::operator[](uint index) {
 //+
 Vector& Vector::operator+(const Vector other) const {
 	Vector temp(capacity + other.capacity);
+	for (int i = 0; i < size; i++)
+	{
+		temp.data[i] = this->data[i];
+	}
+	for (int i = 0; i < other.size; i++)
+	{
+		temp.data[size + i] = other.size;
+	}
+	temp.size = size + other.size;
 	return temp;
 }
 
 //*
 int Vector::operator*(const Vector& other) const {
-//	if (size != other.size) throw IndexException(size, capacity), IndexException(other.size, capacity);//TODO tem q ver see aqui as coisas vao rolar msm...
+	if (size != other.size) throw IndexException(size, capacity, other.size);
 	int sum = 0;
 	for (int i = 0; i < size; i++)
 	{
@@ -65,7 +74,7 @@ Vector& Vector::operator=(const Vector& other) {
 	if (this == &other) return *this;
 	capacity = other.capacity;
 	size = other.size;
-	delete[] data;//Pode ser q de problrma... ai tenho que colicar um if...
+	if(data != nullptr) delete[] data;//Pode ser q de problrma... ai tenho que colicar um if...
 	data = new int[other.size];
 	for (int i = 0; i < other.size; i++)
 	{
@@ -100,7 +109,7 @@ void Vector::delLast() {
 
 void Vector::insert(int val) {
 	if (size == capacity) throw capacity;
-	data[++size - 1] = val;
+	else data[++size - 1] = val;
 }
 
 //clear all object
@@ -111,7 +120,9 @@ void Vector::clear() {
 	size = 0;
 }
 
+//Dtor
 Vector::~Vector()
 {
+	if (data != nullptr) delete[] data;
 }
 
